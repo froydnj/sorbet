@@ -700,7 +700,7 @@ public:
 
     Flags flags;
 
-    u1 numPosArgs;
+    u2 numPosArgs;
 
     TreePtr recv;
 
@@ -710,7 +710,7 @@ public:
 
     TreePtr block; // null if no block passed
 
-    Send(core::LocOffsets loc, TreePtr recv, core::NameRef fun, u1 numPosArgs, ARGS_store args, TreePtr block = nullptr,
+    Send(core::LocOffsets loc, TreePtr recv, core::NameRef fun, u2 numPosArgs, ARGS_store args, TreePtr block = nullptr,
          Flags flags = {});
 
     TreePtr deepCopy() const;

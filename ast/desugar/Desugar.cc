@@ -760,6 +760,7 @@ TreePtr node2TreeImpl(DesugarContext dctx, unique_ptr<parser::Node> what) {
                 if (auto s = cast_tree<Send>(recv)) {
                     auto sendLoc = s->loc;
                     auto [tempRecv, stats, numPosArgs, readArgs, assgnArgs] = copyArgsForOpAsgn(dctx, s);
+                    auto numPosAssgnArgs = numPosArgs + 1;
 
                     assgnArgs.emplace_back(std::move(arg));
                     auto cond = MK::Send(sendLoc, MK::Local(sendLoc, tempRecv), s->fun, numPosArgs, std::move(readArgs),
@@ -768,7 +769,7 @@ TreePtr node2TreeImpl(DesugarContext dctx, unique_ptr<parser::Node> what) {
                         dctx.ctx.state.freshNameUnique(core::UniqueNameKind::Desugar, s->fun, ++dctx.uniqueCounter);
                     stats.emplace_back(MK::Assign(sendLoc, tempResult, std::move(cond)));
 
-                    auto body = MK::Send(sendLoc, MK::Local(sendLoc, tempRecv), s->fun.addEq(dctx.ctx), numPosArgs,
+                    auto body = MK::Send(sendLoc, MK::Local(sendLoc, tempRecv), s->fun.addEq(dctx.ctx), numPosAssgnArgs,
                                          std::move(assgnArgs), s->flags);
                     auto elsep = MK::Local(sendLoc, tempResult);
                     auto iff = MK::If(sendLoc, MK::Local(sendLoc, tempResult), std::move(body), std::move(elsep));
@@ -799,6 +800,7 @@ TreePtr node2TreeImpl(DesugarContext dctx, unique_ptr<parser::Node> what) {
 
                     auto sendLoc = s->loc;
                     auto [tempRecv, stats, numPosArgs, readArgs, assgnArgs] = copyArgsForOpAsgn(dctx, s);
+                    auto numPosAssgnArgs = numPosArgs + 1;
                     assgnArgs.emplace_back(std::move(arg));
                     auto cond = MK::Send(sendLoc, MK::Local(sendLoc, tempRecv), s->fun, numPosArgs, std::move(readArgs),
                                          s->flags);
@@ -806,7 +808,7 @@ TreePtr node2TreeImpl(DesugarContext dctx, unique_ptr<parser::Node> what) {
                         dctx.ctx.state.freshNameUnique(core::UniqueNameKind::Desugar, s->fun, ++dctx.uniqueCounter);
                     stats.emplace_back(MK::Assign(sendLoc, tempResult, std::move(cond)));
 
-                    auto body = MK::Send(sendLoc, MK::Local(sendLoc, tempRecv), s->fun.addEq(dctx.ctx), numPosArgs,
+                    auto body = MK::Send(sendLoc, MK::Local(sendLoc, tempRecv), s->fun.addEq(dctx.ctx), numPosAssgnArgs,
                                          std::move(assgnArgs), s->flags);
                     auto elsep = MK::Local(sendLoc, tempResult);
                     auto iff = MK::If(sendLoc, MK::Local(sendLoc, tempResult), std::move(body), std::move(elsep));

@@ -509,7 +509,7 @@ TreePtr node2TreeImpl(DesugarContext dctx, unique_ptr<parser::Node> what) {
                     flags.isPrivateOk = true;
                 } else if (rec.get()->isSelfReference()) {
                     // In Ruby 2.7 `self.foo()` is also allowed for private method calls,
-                    // not only `foo()`. This pre-emptively allow the new syntax.
+                    // not only `foo()`. This pre-emptively allows the new syntax.
                     flags.isPrivateOk = true;
                 }
                 if (absl::c_any_of(send->args, [](auto &arg) { return parser::isa_node<parser::Splat>(arg.get()); })) {
